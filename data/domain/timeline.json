@@ -1,0 +1,251 @@
+{
+  "topic": "ego_depletion",
+  "description": "Ground-truth belief-revision timeline for the ego-depletion literature. Papers are ingested in ingest_order (chronological). Each checkpoint states what a rational agent should believe about the canonical question IMMEDIATELY AFTER ingesting that paper, given everything ingested so far. Rubrics are anchored to claims that appear verbatim in the real abstracts in corpus.json — the judge checks answers against these, it never sees the abstracts' conclusions paraphrased beyond this.",
+  "canonical_question": "Based on everything you have read so far, does the ego-depletion effect exist, and what is the best current estimate of its size?",
+  "stances": {
+    "EXISTS_PRELIMINARY": "Initial experimental evidence supports the effect; no large-scale synthesis yet.",
+    "EXISTS_ROBUST": "Meta-analytic evidence indicates a reliable, medium-sized effect.",
+    "CONTESTED": "Credible methodological challenge published; effect size and existence now uncertain.",
+    "LIKELY_NULL": "Best bias-corrected and/or preregistered evidence is consistent with no effect.",
+    "INCONCLUSIVE": "Explicit state of unresolved dispute; neither existence nor non-existence is established.",
+    "SMALL_AT_BEST": "Preregistered multilab evidence indicates that if the effect exists it is very small (d ~ 0.1 or less), far below the original estimates."
+  },
+  "checkpoints": [
+    {
+      "id": "cp1",
+      "after_paper": "baumeister1998",
+      "expected_stance": "EXISTS_PRELIMINARY",
+      "rubric": {
+        "must_assert": [
+          "Initial experimental evidence (four experiments) supports the idea that self-control draws on a limited resource",
+          "Evidence at this point comes from a single line of laboratory experiments, not a meta-analysis"
+        ],
+        "must_not_assert": [
+          "The effect has been confirmed by meta-analysis",
+          "The effect has failed to replicate"
+        ]
+      },
+      "probes": [
+        {
+          "type": "canonical",
+          "question": null,
+          "note": "canonical_question is asked at every checkpoint; null means no extra probe here"
+        }
+      ]
+    },
+    {
+      "id": "cp2",
+      "after_paper": "hagger2010",
+      "expected_stance": "EXISTS_ROBUST",
+      "rubric": {
+        "must_assert": [
+          "A meta-analysis of 83 studies found a significant effect of ego depletion on self-control task performance",
+          "The effect appears reliable across tasks and spheres"
+        ],
+        "must_not_assert": [
+          "The effect is null or has failed to replicate",
+          "Publication bias has been shown to account for the effect"
+        ]
+      },
+      "probes": [
+        {
+          "type": "single_hop",
+          "question": "How many studies did the 2010 meta-analysis of ego depletion include, and what did it conclude?",
+          "expected_answer_points": [
+            "83 studies",
+            "significant effect of ego depletion on self-control task performance"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cp3",
+      "after_paper": "carter2014",
+      "expected_stance": "CONTESTED",
+      "rubric": {
+        "must_assert": [
+          "Correcting the 2010 meta-analysis for small-study effects / publication bias suggests the depletion effect may be no different from zero",
+          "The previously accepted medium effect size (d = 0.62) is now in doubt"
+        ],
+        "must_not_assert": [
+          "The effect remains robustly established with a medium effect size",
+          "The matter is settled in either direction"
+        ]
+      },
+      "probes": [
+        {
+          "type": "multi_hop",
+          "question": "Does the conclusion of the 2010 meta-analysis (a significant, reliable depletion effect) still stand, and why or why not?",
+          "expected_answer_points": [
+            "No, it is now contested",
+            "Carter and McCullough applied publication-bias / small-study-effect corrections to the same data",
+            "The bias-corrected estimate was indistinguishable from zero"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cp4",
+      "after_paper": "carter2015",
+      "expected_stance": "LIKELY_NULL",
+      "rubric": {
+        "must_assert": [
+          "Focused meta-analytic tests found very little evidence that the depletion effect is a real phenomenon, at least as measured by common laboratory methods"
+        ],
+        "must_not_assert": [
+          "The effect is robust and medium-sized"
+        ]
+      },
+      "probes": []
+    },
+    {
+      "id": "cp5",
+      "after_paper": "hagger2016",
+      "expected_stance": "LIKELY_NULL",
+      "rubric": {
+        "must_assert": [
+          "A preregistered multilab Registered Replication Report (23 labs, N = 2,141) found d = 0.04 with a 95% CI encompassing zero",
+          "The best preregistered evidence does not support the ego-depletion effect in the standard sequential-task paradigm"
+        ],
+        "must_not_assert": [
+          "d = 0.62 is the current best estimate",
+          "The effect is well supported by replication"
+        ]
+      },
+      "probes": [
+        {
+          "type": "multi_hop",
+          "question": "Trace how the consensus estimate of the ego-depletion effect size changed from 2010 to 2016, citing the specific studies responsible for each change.",
+          "expected_answer_points": [
+            "2010 meta-analysis of 83 studies: significant, medium effect (d = 0.62 as later characterized)",
+            "2014: bias corrections suggested an effect indistinguishable from zero",
+            "2015: focused meta-analytic tests found very little evidence for the effect",
+            "2016: preregistered 23-lab replication found d = 0.04, CI [-0.07, 0.15]"
+          ]
+        },
+        {
+          "type": "single_hop",
+          "question": "What effect size did the 2016 multilab Registered Replication Report of ego depletion find?",
+          "expected_answer_points": [
+            "d = 0.04",
+            "95% CI [-0.07, 0.15], encompassing zero"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cp6",
+      "after_paper": "cunningham2016",
+      "expected_stance": "LIKELY_NULL",
+      "rubric": {
+        "must_assert": [
+          "A published rebuttal argues the null conclusions of the 2015 meta-analysis rest on questionable sampling and statistical decisions (e.g., misuse of trim-and-fill and PET-PEESE)",
+          "The weight of preregistered replication evidence still does not support a reliable effect"
+        ],
+        "must_not_assert": [
+          "The rebuttal restores the effect to robustly established status",
+          "There is no published dissent from the null interpretation"
+        ],
+        "note": "Tests that a single contrary commentary shifts uncertainty but does not flip the belief: the RRR evidence outweighs a methodological commentary."
+      },
+      "probes": [
+        {
+          "type": "multi_hop",
+          "question": "Cunningham and Baumeister (2016) criticize the meta-analytic case against ego depletion. Given the 2016 multilab preregistered replication, should their critique restore confidence in the original medium-sized effect?",
+          "expected_answer_points": [
+            "No",
+            "Their critique targets the 2015 meta-analysis's sampling and statistical choices (trim-and-fill, PET-PEESE)",
+            "It does not address the preregistered 23-lab replication, which independently found d = 0.04 with CI including zero"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cp7",
+      "after_paper": "friese2019",
+      "expected_stance": "INCONCLUSIVE",
+      "rubric": {
+        "must_assert": [
+          "A systematic analysis of the arguments concludes the available evidence is inconclusive despite several hundred published studies",
+          "Neither the existence nor the non-existence of ego depletion is established"
+        ],
+        "must_not_assert": [
+          "The debate is resolved"
+        ]
+      },
+      "probes": []
+    },
+    {
+      "id": "cp8",
+      "after_paper": "dang2021",
+      "expected_stance": "SMALL_AT_BEST",
+      "rubric": {
+        "must_assert": [
+          "A preregistered 12-lab replication (N = 1,775) using the Stroop/antisaccade paradigm found a small but significant effect, d = 0.10 (d = 0.16 after excluding likely-random responders)",
+          "Any surviving effect is far smaller than the originally claimed medium effect"
+        ],
+        "must_not_assert": [
+          "This restores the original d = 0.62 estimate",
+          "The effect is definitively zero"
+        ],
+        "note": "Tests non-monotone revision: the belief must move from LIKELY_NULL/INCONCLUSIVE toward a small positive effect, not merely decay further."
+      },
+      "probes": [
+        {
+          "type": "multi_hop",
+          "question": "The 2016 multilab replication found no ego-depletion effect, but the 2021 Dang et al. multilab replication found a significant effect. How can both be true, and what should we now believe?",
+          "expected_answer_points": [
+            "Different paradigms: the 2016 RRR used a sequential-task protocol (based on Sripada et al.); Dang et al. used Stroop as depleting task and antisaccade as outcome",
+            "Dang et al.'s effect is small (d = 0.10-0.16), not medium",
+            "Belief: a small effect may exist in some paradigms; the original medium estimate remains unsupported"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cp9",
+      "after_paper": "vohs2021",
+      "expected_stance": "SMALL_AT_BEST",
+      "rubric": {
+        "must_assert": [
+          "A 36-lab preregistered paradigmatic test (N = 3,531) found a nonsignificant confirmatory effect (d = 0.06), with Bayesian analysis favoring the null 4:1 against an informed prior of d = 0.30",
+          "Exploratory analysis of the full sample found a small significant effect (d = 0.08)",
+          "Best current belief: if the ego-depletion effect exists at all, it is very small (around d = 0.1 or less); the original medium-sized estimate was inflated, plausibly by publication bias"
+        ],
+        "must_not_assert": [
+          "The effect is medium-sized and robust",
+          "The 2021 evidence definitively proves the effect does not exist in any form"
+        ]
+      },
+      "probes": [
+        {
+          "type": "multi_hop",
+          "question": "Across all the evidence you have stored, which paradigms (if any) still show an ego-depletion effect, and what is the best overall estimate of its size?",
+          "expected_answer_points": [
+            "Stroop/antisaccade paradigm (Dang et al. 2021): small significant effect d = 0.10-0.16",
+            "Sequential-task paradigm (2016 RRR): d = 0.04, CI includes zero",
+            "Paradigmatic multisite test (Vohs et al. 2021): confirmatory d = 0.06 nonsignificant, exploratory d = 0.08",
+            "Overall: at most a very small effect, d around 0.1 or less"
+          ]
+        },
+        {
+          "type": "temporal",
+          "question": "What effect size did the field's best evidence support in 2010, and what does it support now?",
+          "expected_answer_points": [
+            "2010: significant medium effect from the 83-study meta-analysis (d = 0.62 as later characterized)",
+            "Now: at most a very small effect (d around 0.1 or less), with the strongest preregistered tests consistent with zero"
+          ]
+        },
+        {
+          "type": "episodic_integrity",
+          "question": "What exactly did the 2016 Registered Replication Report find, regardless of what we currently believe about ego depletion?",
+          "expected_answer_points": [
+            "23 labs, N = 2,141, sequential-task paradigm based on Sripada et al.",
+            "d = 0.04, 95% CI [-0.07, 0.15]"
+          ],
+          "note": "Belief revision must not destroy episodic records: superseded evidence stays queryable."
+        }
+      ]
+    }
+  ]
+}
