@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.DS_Store
+
+# LoCoMo dataset: no explicit license in the upstream repo, so we do not
+# redistribute it. Fetch with scripts/fetch_locomo.py.
+data/locomo/*.json
+
+# Runtime artifacts (memory stores, eval outputs, logs) — produced on RunPod.
+runs/
+*.sqlite3
+results/

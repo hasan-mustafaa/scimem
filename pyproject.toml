@@ -1,0 +1,30 @@
+[project]
+name = "scimem"
+version = "0.1.0"
+description = "A belief-revising scientific memory layer for LLM agents: Mem0-style consolidation (ADD/UPDATE/DELETE/NOOP) with explicit episodic/semantic separation, evaluated on LoCoMo and a real-literature belief-revision benchmark (ego depletion)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=1.0",
+    "pydantic>=2.5",
+    "numpy>=1.26",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+# Model backends — only needed on the machine that actually runs inference (RunPod).
+anthropic = ["anthropic>=0.40"]
+openai = ["openai>=1.40"]
+local = ["sentence-transformers>=3.0"]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
